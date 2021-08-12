@@ -10,6 +10,7 @@ require dirname(__DIR__).'/config.php';
  */
 
 $new_version = $argv[1] ?? false;
+$release_type = $argv[2] ?? false;
 
 if( !$new_version || $new_version === '--help' )
 {
@@ -21,7 +22,12 @@ if( !$new_version || $new_version === '--help' )
    exit;
 }
 
-`git checkout -b release/$new_version develop`;
-passthru( 'php ' . AppRoot . '/set_version.php ' . $new_version );
+# we might have been asked to make a different type of release, in which case
+# we'll prefix the new branch with that name.  This should mostly be used for 
+# hotfixes
+$release_type = $release_type ?: 'release';
+
+`git checkout -b $release_type/$new_version develop`;
+passthru( 'php ' . AppRoot . '/cmd/set_version.php ' . $new_version );
 `git add VERSION`;
 `git commit -m "Update version number to $new_version"`;
