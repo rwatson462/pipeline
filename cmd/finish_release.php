@@ -23,14 +23,14 @@ $version = trim( file_get_contents(AppRoot . '/VERSION' ) );
 # checkout main
 `git checkout main`;
 # merge into main (this should be easy as all code should come from main so not conflict)
-`git merge --no-ff $release_branch -m "Merge $release_branch into main`;
+`git merge --no-ff $release_branch -m "Merge $release_branch into main"`;
 # tag merge with the version number
 `git tag -a $version`;
 
 # checkout develop
 `git checkout $target_branch`;
 # merge into develop (this may not be easy as develop could have diverged from this branch)
-`git merge --no-ff $release_branch -m "Merge $release_branch into $target_branch`;
+`git merge --no-ff $release_branch -m "Merge $release_branch into $target_branch"`;
 
 # delete release branch once confirmed that all work is complete
 #`git branch -d $release_branch';
