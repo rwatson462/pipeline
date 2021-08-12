@@ -22,6 +22,6 @@ if( !$new_version || $new_version === '--help' )
 }
 
 `git checkout -b release/$new_version develop`;
-passthru( 'php ' . AppRoot . '/set_version.php ' . $new_version );
+passthru( 'php ' . AppRoot . '/cmd/set_version.php ' . $new_version );
 `git add VERSION`;
 `git commit -m "Update version number to $new_version"`;
