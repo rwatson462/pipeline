@@ -33,4 +33,4 @@ $version = trim( file_get_contents(AppRoot . '/VERSION' ) );
 `git merge --no-ff $release_branch -m "Merge $release_branch into $target_branch"`;
 
 # delete release branch once confirmed that all work is complete
-#`git branch -d $release_branch';
+`git branch -d $release_branch`;
