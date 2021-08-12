@@ -25,7 +25,7 @@ $version = trim( file_get_contents(AppRoot . '/VERSION' ) );
 # merge into main (this should be easy as all code should come from main so not conflict)
 `git merge --no-ff $release_branch -m "Merge $release_branch into main"`;
 # tag merge with the version number
-`git tag -a $version`;
+`git tag -a $version -m "$release_branch"`;
 
 # checkout develop
 `git checkout $target_branch`;
