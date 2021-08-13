@@ -19,6 +19,18 @@ const DefaultTargetBranch = 'develop';
 $release_branch = $argv[1] ?? false;
 $target_branch = $argv[2] ?? DefaultTargetBranch;
 
+# show help text if requested or if no branch given
+if( !$release_branch || $release_branch === '--help' )
+{
+   echo "[finish_release.php]\n"
+   ."> Completes the release journey by merging changes in the given release\n"
+   ."> branch into main and develop (or another given branch)\n"
+   ."> Example usage:\n"
+   ."    php finish_release.php release/0.1.2\n"
+   ."    php finish_release.php hotfix/0.2.5 develop\n";
+exit;
+}
+
 # checkout release branch
 $repo->checkout( $release_branch );
 # get version number from /VERSION
