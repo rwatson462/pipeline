@@ -4,7 +4,7 @@ require dirname(__DIR__).'/config.php';
 include AppRoot . '/Pipeline/Git.php';
 use Pipeline\Git;
 
-$repo = new Git();
+$repo = new Git( GitWorkingDirectory );
 
 
 /**
