@@ -41,3 +41,5 @@ passthru( 'php ' . AppRoot . '/cmd/set_version.php ' . $new_version );
 echo "> Updating version file on branch\n";
 $repo->add('VERSION');
 $repo->commit( "Update version number to $new_version" );
+
+$repo->checkout( 'develop' );
