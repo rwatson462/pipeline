@@ -1,6 +1,11 @@
 <?php
 
 require dirname(__DIR__).'/config.php';
+include AppRoot . '/Pipeline/GIT.php';
+use Pipeline\GIT;
+
+$repo = new GIT();
+
 
 /**
  * This script starts the release journey.
@@ -27,7 +32,9 @@ if( !$new_version || $new_version === '--help' )
 # hotfixes
 $release_type = $release_type ?: 'release';
 
-`git checkout -b $release_type/$new_version develop`;
+$repo->checkout( 'develop', "$release_type/$new_version" );
+
 passthru( 'php ' . AppRoot . '/cmd/set_version.php ' . $new_version );
-`git add VERSION`;
-`git commit -m "Update version number to $new_version"`;
+
+$repo->add('VERSION');
+$repo->commit( "Update version number to $new_version" );
