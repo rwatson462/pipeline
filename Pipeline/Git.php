@@ -68,4 +68,9 @@ class Git
    {
       return $this->exec( "git commit -m '$message'" );
    }
+
+   public function tag( string $tag_name, string $tag_message ): bool
+   {
+      return $this->exec( "git tag -a $tag_name -m '$tag_message'" );
+   }
 }
