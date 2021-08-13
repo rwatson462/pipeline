@@ -33,7 +33,9 @@ try {
 }
 catch( Exception $e )
 {
-   echo "> Error during merge into main:\n" . implode( "\n", $output );
+   echo "> Error during merge into main:\n" . implode( "\n", $output ) . "\n";
+   echo "\n> Working tree left in merge conflict state to resolve\n";
+   echo "> Run this task again once all conflicts are resolved and merge complete to merge into develop\n";
    exit(1);
 }
 
@@ -49,7 +51,7 @@ try {
    $repo->exec( `git merge --no-ff $release_branch -m "Merge $release_branch into $target_branch"`, $output );
 } catch( Exception $e )
 {
-   echo "> Error during merge into $target_branch:\n" . implode( "\n", $output );
+   echo "> Error during merge into $target_branch:\n" . implode( "\n", $output ) . "\n";
    echo "\n> Working tree left in merge conflict state to resolve\n";
    exit(1);
 }
