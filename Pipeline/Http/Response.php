@@ -19,7 +19,7 @@ class Response
    {
       $this->throwExceptionIfResponseSent();
 
-      // allow some convenience shortcuts
+      # allow some convenience shortcuts
       switch( $type )
       {
          case 'text': $type = 'text/plain'; break;

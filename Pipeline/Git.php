@@ -28,22 +28,22 @@ class Git
     * @return true on success
     * @throws \Exception on non-zero status code of command
     */
-   private function exec( string $cmd, ?array &$output = null ): bool
+   public function exec( string $cmd, ?array &$output = null ): bool
    {
-      // change working directory to the git directory
+      # change working directory to the git directory
       $cwd = getcwd();
       chdir( $this->working_dir );
 
       $result = 0;
-      // $cmd should be the basic git command like 'git checkout develop'
-      // we'll redirect stderr to stdout so we can capture the output on failure
+      # $cmd should be the basic git command like 'git checkout develop'
+      # we'll redirect stderr to stdout so we can capture the output on failure
       $cmd .= ' 2>&1';
       exec( $cmd, $output, $result );
 
-      // change back to the previous working directory in case it's important
+      # change back to the previous working directory in case it's important
       chdir( $cwd );
 
-      // git commands return a non-zero status on failure
+      # git commands return a non-zero status on failure
       if( $result === 0 ) return true;
 
       throw new \Exception( implode( "\n", $output ) );
@@ -68,4 +68,15 @@ class Git
    {
       return $this->exec( "git commit -m '$message'" );
    }
+
+   public function tag( string $tag_name, string $tag_message ): bool
+   {
+      return $this->exec( "git tag -a $tag_name -m '$tag_message'" );
+   }
+
+   public function deleteBranch( string $branch_name ): bool
+   {
+      return $this->exec( "git branch -d $branch_name" );
+   }
+
 }
