@@ -8,7 +8,7 @@ namespace Pipeline;
  * when they are not.
  * This allows easier control during PHP script execution later.
  */
-class GIT
+class Git
 {
    /**
     * Executes a GIT command

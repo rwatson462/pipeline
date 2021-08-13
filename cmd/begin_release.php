@@ -1,10 +1,10 @@
 <?php
 
 require dirname(__DIR__).'/config.php';
-include AppRoot . '/Pipeline/GIT.php';
-use Pipeline\GIT;
+include AppRoot . '/Pipeline/Git.php';
+use Pipeline\Git;
 
-$repo = new GIT();
+$repo = new Git();
 
 
 /**
