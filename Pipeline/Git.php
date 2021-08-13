@@ -28,7 +28,7 @@ class Git
     * @return true on success
     * @throws \Exception on non-zero status code of command
     */
-   private function exec( string $cmd, ?array &$output = null ): bool
+   public function exec( string $cmd, ?array &$output = null ): bool
    {
       # change working directory to the git directory
       $cwd = getcwd();
