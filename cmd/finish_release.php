@@ -38,10 +38,13 @@ $version = trim( file_get_contents(AppRoot . '/VERSION' ) );
 
 # checkout main
 $repo->checkout( 'main' );
-# merge into main (this should be easy as all code should come from main so not conflict)
+# merge into main
+# we'll automatically accept "their" changes (the changes from the release branch)
+# as all work in a release branch must be descended from main anyway
+# the only way this won't be the case is if someone's been fiddling
 $output = [];
 try {
-   $repo->exec( "git merge --no-ff $release_branch -m 'Merge $release_branch into main'", $output );
+   $repo->exec( "git merge -Xtheirs --no-ff $release_branch -m 'Merge $release_branch into main'", $output );
 }
 catch( Exception $e )
 {
