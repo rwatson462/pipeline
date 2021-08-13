@@ -5,6 +5,10 @@
  */
 
 include dirname(__DIR__).'/config.php';
+include AppRoot . '/Pipeline/Git.php';
+use Pipeline\Git;
+
+$repo = new Git( GitWorkingDirectory );
 
 const DefaultTargetBranch = 'develop';
 
@@ -16,21 +20,40 @@ $release_branch = $argv[1] ?? false;
 $target_branch = $argv[2] ?? DefaultTargetBranch;
 
 # checkout release branch
-`git checkout $release_branch`;
+$git->checkout( $release_branch );
 # get version number from /VERSION
 $version = trim( file_get_contents(AppRoot . '/VERSION' ) );
 
 # checkout main
-`git checkout main`;
+$repo->checkout( 'main' );
 # merge into main (this should be easy as all code should come from main so not conflict)
-`git merge --no-ff $release_branch -m "Merge $release_branch into main"`;
+$output = [];
+try {
+   $repo->exec( "git merge --no-ff $release_branch -m 'Merge $release_branch into main'", $output );
+}
+catch( Exception $e )
+{
+   echo "> Error during merge into main:\n" . implode( "\n", $output );
+   exit(1);
+}
+
 # tag merge with the version number
-`git tag -a $version -m "$release_branch"`;
+$repo->tag( $version, $release_branch );
 
 # checkout develop
-`git checkout $target_branch`;
+$repo->checkout( $target_branch );
+
 # merge into develop (this may not be easy as develop could have diverged from this branch)
-`git merge --no-ff $release_branch -m "Merge $release_branch into $target_branch"`;
+$output = [];
+try {
+   $repo->exec( `git merge --no-ff $release_branch -m "Merge $release_branch into $target_branch"`, $output );
+} catch( Exception $e )
+{
+   echo "> Error during merge into $target_branch:\n" . implode( "\n", $output );
+   echo "\n> Working tree left in merge conflict state to resolve\n";
+   exit(1);
+}
 
 # delete release branch once confirmed that all work is complete
-`git branch -d $release_branch`;
+$repo->deleteBranch( $release_branch );
+# I did fancy writing $repo->branch( $release_branch )->delete() but that's a bit OTT for this
