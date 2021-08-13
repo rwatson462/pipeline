@@ -1,6 +1,11 @@
 <?php
 
 require dirname(__DIR__).'/config.php';
+include AppRoot . '/Pipeline/Git.php';
+use Pipeline\Git;
+
+$repo = new Git( GitWorkingDirectory );
+
 
 /**
  * This script starts the release journey.
@@ -10,6 +15,7 @@ require dirname(__DIR__).'/config.php';
  */
 
 $new_version = $argv[1] ?? false;
+$release_type = $argv[2] ?? false;
 
 if( !$new_version || $new_version === '--help' )
 {
@@ -21,7 +27,17 @@ if( !$new_version || $new_version === '--help' )
    exit;
 }
 
-`git checkout -b release/$new_version develop`;
+# we might have been asked to make a different type of release, in which case
+# we'll prefix the new branch with that name.  This should mostly be used for 
+# hotfixes
+$release_type = $release_type ?: 'release';
+
+echo "> Creating new release branch $release_type/$new_version\n";
+$repo->checkout( 'develop', "$release_type/$new_version" );
+
+# Update the VERSION file
 passthru( 'php ' . AppRoot . '/cmd/set_version.php ' . $new_version );
-`git add VERSION`;
-`git commit -m "Update version number to $new_version"`;
+
+echo "> Updating version file on branch\n";
+$repo->add('VERSION');
+$repo->commit( "Update version number to $new_version" );
