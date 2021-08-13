@@ -11,6 +11,17 @@ namespace Pipeline;
 class Git
 {
    /**
+    * ABSOLUTE directory to git repository (i.e. directory which contains
+    * the .git directory)
+    */
+   private string $working_dir = '';
+
+   public function __construct( string $working_dir )
+   {
+      $this->working_dir = $working_dir;
+   }
+
+   /**
     * Executes a GIT command
     * @param string $cmd the command to run
     * @param array $output populated with both stdout and stderr output
@@ -19,11 +30,18 @@ class Git
     */
    private function exec( string $cmd, ?array &$output = null ): bool
    {
+      // change working directory to the git directory
+      $cwd = getcwd();
+      chdir( $this->working_dir );
+
       $result = 0;
       // $cmd should be the basic git command like 'git checkout develop'
       // we'll redirect stderr to stdout so we can capture the output on failure
       $cmd .= ' 2>&1';
       exec( $cmd, $output, $result );
+
+      // change back to the previous working directory in case it's important
+      chdir( $cwd );
 
       // git commands return a non-zero status on failure
       if( $result === 0 ) return true;
