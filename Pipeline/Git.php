@@ -73,4 +73,10 @@ class Git
    {
       return $this->exec( "git tag -a $tag_name -m '$tag_message'" );
    }
+
+   public function deleteBranch( string $branch_name ): bool
+   {
+      return $this->exec( "git branch -d $branch_name" );
+   }
+
 }
