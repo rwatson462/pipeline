@@ -66,6 +66,6 @@ class Git
 
    public function commit( string $message ): bool
    {
-      return $this->exec( "git commit -m $message" );
+      return $this->exec( "git commit -m '$message'" );
    }
 }
