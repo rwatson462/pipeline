@@ -34,6 +34,7 @@ $release_type = $release_type ?: 'release';
 
 $repo->checkout( 'develop', "$release_type/$new_version" );
 
+# Update the VERSION file
 passthru( 'php ' . AppRoot . '/cmd/set_version.php ' . $new_version );
 
 $repo->add('VERSION');
