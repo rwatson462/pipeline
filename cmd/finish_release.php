@@ -20,7 +20,7 @@ $release_branch = $argv[1] ?? false;
 $target_branch = $argv[2] ?? DefaultTargetBranch;
 
 # checkout release branch
-$git->checkout( $release_branch );
+$repo->checkout( $release_branch );
 # get version number from /VERSION
 $version = trim( file_get_contents(AppRoot . '/VERSION' ) );
 
