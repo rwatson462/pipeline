@@ -32,10 +32,12 @@ if( !$new_version || $new_version === '--help' )
 # hotfixes
 $release_type = $release_type ?: 'release';
 
+echo "> Creating new release branch $release_type/$new_version\n";
 $repo->checkout( 'develop', "$release_type/$new_version" );
 
 # Update the VERSION file
 passthru( 'php ' . AppRoot . '/cmd/set_version.php ' . $new_version );
 
+echo "> Updating version file on branch\n";
 $repo->add('VERSION');
 $repo->commit( "Update version number to $new_version" );
