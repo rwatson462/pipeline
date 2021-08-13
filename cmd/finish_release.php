@@ -48,7 +48,7 @@ $repo->checkout( $target_branch );
 # merge into develop (this may not be easy as develop could have diverged from this branch)
 $output = [];
 try {
-   $repo->exec( `git merge --no-ff $release_branch -m "Merge $release_branch into $target_branch"`, $output );
+   $repo->exec( "git merge --no-ff $release_branch -m 'Merge $release_branch into $target_branch'", $output );
 } catch( Exception $e )
 {
    echo "> Error during merge into $target_branch:\n" . implode( "\n", $output ) . "\n";
